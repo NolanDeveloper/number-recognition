@@ -1,16 +1,15 @@
 package com.nolan.patrec;
 
 import java.io.*;
-import java.util.ArrayList;
 
 class DataSet {
-    private final Matrix[] images;
+    private final double[][] images;
     private final int[] labels;
     public final int size;
     public final int width;
     public final int height;
 
-    public DataSet(InputStream imagesInputStream, InputStream labelsInputStream) throws IOException {
+    public DataSet(final InputStream imagesInputStream, final InputStream labelsInputStream) throws IOException {
         DataInputStream imagesDataInputStream = new DataInputStream(imagesInputStream);
         DataInputStream labelsDataInputStream = new DataInputStream(labelsInputStream);
         if (0x00000803 != imagesDataInputStream.readInt()) {
@@ -25,40 +24,42 @@ class DataSet {
             throw new Error("Number of labels is not same as number of images.");
         }
         size = numberOfImages;
-        images = new Matrix[size];
+        images = new double[size][];
         labels = new int[size];
         height = imagesDataInputStream.readInt();
         width = imagesDataInputStream.readInt();
         for (int i = 0; i < numberOfImages; ++i) {
-            ArrayList<Double> data = new ArrayList<>(height * width);
+            images[i] = new double[height * width];
             for (int j = 0; j < height * width; ++j) {
-                data.add((double) imagesDataInputStream.readUnsignedByte());
+                images[i][j] = imagesDataInputStream.readUnsignedByte();
             }
-            images[i] = new Matrix(height, width, data);
             labels[i] = labelsDataInputStream.readUnsignedByte();
         }
     }
 
-    public void train(Perceptron perceptron, int numberOfEpochs) {
+    public void train(final Perceptron perceptron, final int numberOfEpochs) {
         for (int k = 0; k < numberOfEpochs; ++k) {
             int numberOfErrors = 0;
             for (int i = 0; i < size; ++i) {
-                Matrix image = images[i];
+                double[] image = images[i];
                 int label = labels[i];
-                Matrix expectedOutput = new Matrix(1, 10, (ignore, j) -> j == label ? 1.0 : 0);
-                Matrix output = perceptron.train(image, expectedOutput);
+                double[] expectedOutput = new double[10];
+                for (int j = 0; j < expectedOutput.length; ++j) {
+                    expectedOutput[j] = j == label ? 1 : 0;
+                }
+                double[] output = perceptron.train(image, expectedOutput);
                 if (Perceptron.getAnswer(output) != label) ++numberOfErrors;
             }
             System.out.println("Training error rate: " + (double) numberOfErrors / size);
         }
     }
 
-    public void test(Perceptron perceptron) {
+    public void test(final Perceptron perceptron) {
         int numberOfErrors = 0;
         for (int i = 0; i < size; ++i) {
-            Matrix image = images[i];
+            double[] image = images[i];
             int label = labels[i];
-            Matrix output = perceptron.run(image);
+            double[] output = perceptron.run(image);
             if (Perceptron.getAnswer(output) != label) ++numberOfErrors;
         }
         System.out.println("Error rate: " + (double)numberOfErrors / size);
