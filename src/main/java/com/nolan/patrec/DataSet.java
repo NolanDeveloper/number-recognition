@@ -31,7 +31,7 @@ class DataSet {
         for (int i = 0; i < numberOfImages; ++i) {
             images[i] = new double[height * width];
             for (int j = 0; j < height * width; ++j) {
-                images[i][j] = imagesDataInputStream.readUnsignedByte();
+                images[i][j] = imagesDataInputStream.readUnsignedByte() / 256.;
             }
             labels[i] = labelsDataInputStream.readUnsignedByte();
         }
@@ -50,7 +50,7 @@ class DataSet {
                 double[] output = perceptron.train(image, expectedOutput);
                 if (Perceptron.getAnswer(output) != label) ++numberOfErrors;
             }
-            System.out.println("Training error rate: " + (double) numberOfErrors / size);
+            System.out.println("Training error rate(%): " + (double) numberOfErrors / size * 100);
         }
     }
 
@@ -62,6 +62,6 @@ class DataSet {
             double[] output = perceptron.run(image);
             if (Perceptron.getAnswer(output) != label) ++numberOfErrors;
         }
-        System.out.println("Error rate: " + (double)numberOfErrors / size);
+        System.out.println("Error rate(%): " + (double)numberOfErrors / size * 100);
     }
 }

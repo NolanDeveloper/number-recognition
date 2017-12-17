@@ -23,7 +23,7 @@ public class Main {
         DataSet trainDataSet = getTrainDataSet();
         DataSet testDataSet = getTestDataSet();
         Perceptron perceptron = new Perceptron(trainDataSet.height * trainDataSet.width, 10, 0.05);
-        trainDataSet.train(perceptron, 10);
+        trainDataSet.train(perceptron, 30);
         testDataSet.test(perceptron);
         return perceptron;
     }

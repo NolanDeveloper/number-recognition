@@ -54,7 +54,7 @@ public class Perceptron {
         double[] output = run(input);
         for (int i = 0; i < outputSize; ++i) {
             for (int j = 0; j < inputSize; ++j) {
-                weights[i][j] += eta * (expectedOutput[i] - output[i]) * input[j];
+                weights[i][j] += eta * output[i] * (1 - output[i]) * (expectedOutput[i] - output[i]) * input[j];
             }
         }
         return output;
@@ -72,7 +72,7 @@ public class Perceptron {
         for (int i = 0; i < outputSize; ++i) {
             double s = 0;
             for (int j = 0; j < input.length; ++j) {
-                s += input[j] * weights[i][j];
+                s += weights[i][j] * input[j];
             }
             result[i] = activationFunction(s);
         }
