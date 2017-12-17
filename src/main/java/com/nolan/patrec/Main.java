@@ -1,5 +1,6 @@
 package com.nolan.patrec;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,13 +24,13 @@ public class Main {
         DataSet trainDataSet = getTrainDataSet();
         DataSet testDataSet = getTestDataSet();
         Perceptron perceptron = new Perceptron(trainDataSet.height * trainDataSet.width, 10, 0.05);
-        trainDataSet.train(perceptron, 30);
+        trainDataSet.train(perceptron, 10);
         testDataSet.test(perceptron);
         return perceptron;
     }
 
     public static void main(final String... args) throws IOException {
-        //new Window();
-        trainPerceptron();
+        new Window();
+//        trainPerceptron().save(new FileOutputStream("perceptron.data"));
     }
 }

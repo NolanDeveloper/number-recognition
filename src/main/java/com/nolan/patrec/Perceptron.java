@@ -25,6 +25,7 @@ public class Perceptron {
         inputSize = in.readInt();
         outputSize = in.readInt();
         eta = in.readDouble();
+        weights = new double[outputSize][inputSize];
         for (int i = 0; i < outputSize; ++i) {
             for (int j = 0; j < inputSize; ++j) {
                 weights[i][j] = in.readDouble();
