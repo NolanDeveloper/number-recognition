@@ -6,7 +6,9 @@ apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
-mainClassName = 'com.nolan.patrec.MainWindow'
+mainClassName = 'com.nolan.patrec.Main'
+
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
