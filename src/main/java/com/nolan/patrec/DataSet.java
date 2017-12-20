@@ -38,6 +38,7 @@ class DataSet {
     }
 
     public void train(final Perceptron perceptron, final int numberOfEpochs) {
+        double previousErrorRate = 0;
         for (int k = 0; k < numberOfEpochs; ++k) {
             int numberOfErrors = 0;
             for (int i = 0; i < size; ++i) {
@@ -47,10 +48,13 @@ class DataSet {
                 for (int j = 0; j < expectedOutput.length; ++j) {
                     expectedOutput[j] = j == label ? 1 : 0;
                 }
-                double[] output = perceptron.train(image, expectedOutput);
-                if (Perceptron.getAnswer(output) != label) ++numberOfErrors;
+                double[] outputs = perceptron.train(image, expectedOutput);
+                if (Perceptron.getAnswer(outputs) != label) ++numberOfErrors;
             }
-            System.out.println("Training error rate(%): " + (double) numberOfErrors / size * 100);
+            double errorRate = (double) numberOfErrors / size * 100;
+            double delta = errorRate - previousErrorRate;
+            previousErrorRate = errorRate;
+            System.out.println("" + k + ") Training error rate(%): " + errorRate + " (" + delta + ")");
         }
     }
 

@@ -23,7 +23,13 @@ public class Main {
     public static Perceptron trainPerceptron() throws IOException {
         DataSet trainDataSet = getTrainDataSet();
         DataSet testDataSet = getTestDataSet();
-        Perceptron perceptron = new Perceptron(trainDataSet.height * trainDataSet.width, 10, 0.05);
+        int[] layerSizes = new int[] {
+                trainDataSet.height * trainDataSet.width, // input layer
+                300,    // hidden layer
+                100,    // hidden layer
+                10      // output layer
+        };
+        Perceptron perceptron = new Perceptron(layerSizes, 0.05);
         trainDataSet.train(perceptron, 10);
         testDataSet.test(perceptron);
         return perceptron;
